@@ -29,7 +29,7 @@ The app will open in your browser. You can:
 
 ## Structure
 1. `titanic.py`: Main Python file with the logic for uploading files, querying OpenAI, displaying results, and handling data visualizations.
-2. `key.env`: Store your OpenAI API key securely (not included in the repo and is specified in .gitignore, add it manually).
+2. `key.env`: Store your OpenAI API key securely (not included in the repo and is specified in `.gitignore`, add it manually).
 3. `train.csv`, test.csv: Example Titanic dataset CSV files to use with the app.
 
 
@@ -40,8 +40,8 @@ The "Ask Question" feature is currently encountering an issue due to recent chan
 
 
 ### Cause:
-- The OpenAI API has transitioned to a new interface where openai.Completion is deprecated. 
-- The current OpenAI Python package version (1.0.0 and above) is incompatible with the existing code that uses openai.Completion.
+- The OpenAI API has transitioned to a new interface where `openai.Completion` is deprecated. 
+- The current `OpenAI Python package version (1.0.0 and above)` is incompatible with the existing code that uses `openai.Completion`.
 
 
 ### Solution:
