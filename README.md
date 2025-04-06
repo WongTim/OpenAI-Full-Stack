@@ -14,7 +14,7 @@ This is a simple web application built with Streamlit that allows users to uploa
 
 ## To run the program
 Paste this command into the command prompt:
-"streamlit run titanic.py"
+`streamlit run titanic.py`
 
 
 The app will open in your browser. You can:
@@ -28,7 +28,29 @@ The app will open in your browser. You can:
 
 
 ## Structure
-1. titanic.py: Main Python file with the logic for uploading files, querying OpenAI, displaying results, and handling data visualizations.
-2. key.env: Store your OpenAI API key securely (not included in the repo and is specified in .gitignore, add it manually).
-3. train.csv, test.csv: Example Titanic dataset CSV files to use with the app.
+1. `titanic.py`: Main Python file with the logic for uploading files, querying OpenAI, displaying results, and handling data visualizations.
+2. `key.env`: Store your OpenAI API key securely (not included in the repo and is specified in .gitignore, add it manually).
+3. `train.csv`, test.csv: Example Titanic dataset CSV files to use with the app.
 
+
+## Known Issue: "Ask Question" Feature Not Working Properly
+
+# Problem:
+The "Ask Question" feature is currently encountering an issue due to recent changes in the OpenAI API. Specifically, the openai.Completion method is no longer supported in versions of the `OpenAI Python package >=1.0.0`. As a result, querying the dataset through the app generates an error.
+
+
+# Cause:
+- The OpenAI API has transitioned to a new interface where openai.Completion is deprecated. 
+- The current OpenAI Python package version (1.0.0 and above) is incompatible with the existing code that uses openai.Completion.
+
+
+# Solution:
+There are two potential solutions to resolve this issue:
+1. Upgrade the Code to Support `OpenAI API 1.0.0+`:
+2. Update the code to use the new openai.ChatCompletion method instead of openai.Completion. A detailed migration guide is available to assist with these changes.
+
+
+# Use the Previous Version of OpenAI (Temporary Solution):
+If updating the code is not feasible immediately, you can downgrade the OpenAI package to version 0.28, which supports the openai.Completion method. To install this version, run: `pip install openai==0.28`
+
+This will allow the "Ask Question" feature to function as expected without requiring immediate code changes.
