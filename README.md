@@ -13,7 +13,7 @@ This is a simple web application built with Streamlit that allows users to uploa
 
 
 ## To run the program
-Paste this command into the command prompt:
+Run this command in the command prompt, specifying the directory where the `py` file is located:
 `streamlit run titanic.py`
 
 
@@ -24,6 +24,23 @@ The app will open in your browser. You can:
 - View visualizations, such as a histogram of "Age" and bar plots of "Survived" by "Sex."
 - View and reuse past questions and answers.
 - Provide feedback on the answers.
+
+## Some questions to ask the OpenAI model
+
+### Survival Analysis
+1. What is the survival rate overall?
+2.How does survival rate vary by embarkation point (C, Q, S)?
+
+### Demographic Insights
+1. What is the age distribution of passengers?
+2. What percentage of passengers were male versus female?
+3.How many children (under 18) were onboard?
+
+
+### Visualization and Trends
+1.Can you show a histogram of age distribution for survivors versus non-survivors?
+2.What is the trend in survival rate based on fare paid?
+
 
 
 
