@@ -13,7 +13,7 @@ This is a simple web application built with Streamlit that allows users to uploa
 
 
 ## To run the program
-Run this command in the command prompt, specifying the directory where the `py` file is located:
+Run this command in the command prompt, specifying the directory where the `.py` file is located:
 `streamlit run titanic.py`
 
 
