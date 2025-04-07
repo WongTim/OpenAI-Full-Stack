@@ -11,19 +11,19 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv(dotenv_path="key.env")
 
-# Set your OpenAI API key from environment variable
+# Retrieve OpenAI API key from environment variable
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 
 
 
-# Store prompt history as a session state variable
+# Store prompt history as a session state variable. This is for the previous prompts input by user
 if 'prompt_history' not in st.session_state:
     st.session_state.prompt_history = []
 
 
 def upload_file():
-    # Allow multiple files to be uploaded
+    # Streamlit function to upload and accept multiple files. Only .xlsx or .csv extensions are accepted
     uploaded_files = st.file_uploader("Upload your CSV or Excel files", type=["csv", "xlsx"], accept_multiple_files=True)
     
     # Initialize the flag for tracking upload attempts
@@ -35,25 +35,26 @@ def upload_file():
         data_dict = {}
         for uploaded_file in uploaded_files:
             try:
-                # Handle CSV files
+                # read_csv if it's a csv file
                 if uploaded_file.name.endswith('.csv'):
                     data_dict[uploaded_file.name] = pd.read_csv(uploaded_file)
-                # Handle Excel files
+                # read_excel if it's an excel file
                 elif uploaded_file.name.endswith('.xlsx'):
                     xls = pd.ExcelFile(uploaded_file)
                     sheet_names = xls.sheet_names
                     selected_sheet = st.selectbox(f"Select a sheet from {uploaded_file.name}", sheet_names)
                     data_dict[uploaded_file.name] = pd.read_excel(uploaded_file, sheet_name=selected_sheet)
                 else:
-                    # Handle invalid file formats
+                    # The function is written to accept only excel and csv files, but this is a last layer check
                     st.error(f"Invalid file type: {uploaded_file.name}. Please upload a valid CSV or Excel file.")
                     return None
             except Exception as e:
+                # Display the error on screen 
                 st.error(f"Error uploading file {uploaded_file.name}: {e}")
                 return None
         return data_dict
     elif st.session_state.upload_attempted:
-        # Show warning only if an upload was attempted but failed
+        # Show warning only if an upload was attempted 
         st.warning("Please upload a valid CSV or Excel file.")
     return None
 
@@ -63,11 +64,11 @@ def handle_large_data(data_string, token_limit=3500):
     Truncates the dataset string if it exceeds the token limit.
     
     Parameters:
-    - data_string (str): The string representation of the dataset.
-    - token_limit (int): The maximum number of tokens allowed (default: 3500).
+    data_string (str): The string representation of the dataset.
+    token_limit (int): The maximum number of tokens allowed (default: 3500).
     
     Returns:
-    - str: The truncated dataset string, if necessary.
+    str: The truncated dataset string, if necessary.
     """
     # Check if the data_string length exceeds the token limit
     if len(data_string) > token_limit:
@@ -79,19 +80,28 @@ def handle_large_data(data_string, token_limit=3500):
 
 
 def ask_question(data, question):
+    """
+    A helper function that takes in a dataset and its related question, and generates a corresponding answer
+
+    Parameters: 
+    data: The dataframe of the csv file
+    question (str): Text input by the user
+
+    """
+    
     # Convert the DataFrame to a string (to pass as part of the prompt)
     data_string = data.to_string()
 
-    # Truncate the data if it's too large to handle OpenAI's token limit
+    # Truncate the data if it's too large to handle OpenAI's token limit. Models gpt3 and 4o have a token limit of 4096
     data_string = handle_large_data(data_string)
 
     # Create the prompt for OpenAI
     prompt = f"Provide a brief summary based on this dataset:\n\n{data_string[:2000]}\n\nQuestion: {question}"
 
     try:
-        # Send the prompt to OpenAI using the gpt-3.5-turbo model
+        # Send the prompt to OpenAI using the gpt-3.5-turbo model. Thus, the response object would also have a prompt and response dictionary to store the chat
         response = openai.ChatCompletion.create(
-            model="gpt-1o",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
@@ -137,7 +147,8 @@ def display_and_ask(data_dict):
         show_visualizations(data)
 
 
-# Function to visualize the data (example: histogram or bar plot)
+
+# Function to visualize the data in histogram or bar plot using matplotlib
 def show_visualizations(data):
     if st.button("Show Histogram of Age (if applicable)"):
         if 'Age' in data.columns:
@@ -173,7 +184,8 @@ def display_prompt_history(data_dict):
                 answer = ask_question(data_dict[file], question)
                 st.write(f"**Answer**: {answer}")
 
-# Feedback Section for evaluating usefulness
+
+# Feedback Section for evaluating usefulness. It is called upon when you submit the radio button answer
 def feedback_section():
     feedback = st.radio("Was this answer helpful?", ["Yes", "No"])
     if feedback == "No":
@@ -181,10 +193,11 @@ def feedback_section():
         if feedback_text:
             st.write("Thank you for your feedback!")
 
-def main():
-    st.title("File Upload and Ask Questions with History")
 
-    # Upload file and get data
+def main():
+    st.title("OpenAI Full Stack Challenge")
+
+    # Upload file and get its data
     data_dict = upload_file()
 
     # Check if valid data is available
@@ -192,7 +205,11 @@ def main():
         display_and_ask(data_dict)
         display_prompt_history(data_dict)
         feedback_section()
+    elif st.session_state.upload_attempted:
+        # Explicitly handle the case where data upload was attempted but invalid
+        st.error("No valid data uploaded. Please upload a valid CSV or Excel file.")
 
+# Run the program as a standalone and not an imported module
 if __name__ == "__main__":
     main()
 
