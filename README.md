@@ -48,7 +48,7 @@ The app will open in your browser. You can:
 ## Structure
 1. `titanic.py`: Main Python file with the logic for uploading files, querying OpenAI, displaying results, and handling data visualizations.
 2. `key.env`: Store your OpenAI API key securely (not included in the repo and is specified in `.gitignore`, add it manually).
-3. `train.csv`, test.csv: Example Titanic dataset CSV files to use with the app.
+3. `train.csv`, `test.csv`: Titanic dataset CSV files to use with the app.
 
 
 ## Known Issue: "Ask Question" Feature Not Working Properly
