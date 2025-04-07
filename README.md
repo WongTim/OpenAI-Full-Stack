@@ -29,17 +29,18 @@ The app will open in your browser. You can:
 
 ### Survival Analysis
 1. What is the survival rate overall?
-2.How does survival rate vary by embarkation point (C, Q, S)?
+2. How does survival rate vary by embarkation point (C, Q, S)?
 
 ### Demographic Insights
 1. What is the age distribution of passengers?
 2. What percentage of passengers were male versus female?
-3.How many children (under 18) were onboard?
+3. How many children (under 18) were onboard?
 
 
 ### Visualization and Trends
-1.Can you show a histogram of age distribution for survivors versus non-survivors?
-2.What is the trend in survival rate based on fare paid?
+1. Can you show a histogram of age distribution for survivors versus non-survivors?
+2. What is the trend in survival rate based on fare paid?
+3. Can you create a bar plot showing survival rate by embarkation point?
 
 
 
